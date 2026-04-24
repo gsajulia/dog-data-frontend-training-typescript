@@ -22,7 +22,7 @@ const Home = () => {
     dog.attributes.name.toLowerCase().includes(searchTerm.toLowerCase().trim()),
   );
 
-  const hasNextPage = dogs.length === PAGE_SIZE;
+  const hasNextPage = filteredDogs.length === PAGE_SIZE;
   const hasPrevPage = currentPage > 1;
 
   const handleNextPage = () => {
