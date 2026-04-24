@@ -16,7 +16,14 @@ const DogDetail = () => {
   const { isFavorite, toggleFavorite } = useFavorites();
 
   if (loading) {
-    return <p className={styles.spinner}>Carregando...</p>;
+    return (
+      <div className={styles.detail}>
+        <button onClick={() => navigate("/")} className={styles.backBtn}>
+          ← Voltar
+        </button>
+        <p className={styles.loading}>Carregando...</p>
+      </div>
+    );
   }
 
   if (!dog) {

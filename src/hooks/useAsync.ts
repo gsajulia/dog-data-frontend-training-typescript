@@ -12,7 +12,7 @@ export const useAsync = <T>(
 ) => {
   const [state, setState] = useState<UseAsyncState<T>>({
     data: null,
-    loading: false,
+    loading: true,
     error: null,
   });
 

@@ -33,6 +33,10 @@ const Home = () => {
     setCurrentPage((prev) => Math.max(1, prev - 1));
   };
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   return (
     <div className={styles.wrapper}>
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -57,7 +61,7 @@ const Home = () => {
           </p>
         )}
 
-        {loading && <p className={styles.noResults}>Loading...</p>}
+        {loading && <p className={styles.noResults}>Carregando...</p>}
       </div>
 
       {!error && !loading && filteredDogs.length > 0 && (

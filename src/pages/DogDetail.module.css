@@ -1,9 +1,11 @@
 .detail {
-  min-height: 100vh;
+  min-height: 80vh;
+  min-width: 80vw;
   padding: 20px;
   background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .backBtn {
@@ -33,6 +35,8 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   flex: 1;
   align-self: center;
+  width: 100%;
+  min-height: 700px;
 }
 
 .imageSection {
