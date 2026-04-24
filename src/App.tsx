@@ -4,7 +4,6 @@ import FavoritesCounter from "./components/FavoritesCounter/FavoritesCounter.js"
 import Home from "./pages/Home.js";
 import DogDetail from "./pages/DogDetail.js";
 import styles from "./App.module.css";
-import "./App.css";
 
 function App() {
   return (
