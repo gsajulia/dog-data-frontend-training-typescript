@@ -1,40 +1,22 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useAsync } from "../hooks/useAsync";
-import { fetchDogBreeds } from "../service/dogService";
+import { fetchDogBreedById } from "../service/dogService";
 import { useFavorites } from "../context/FavoritesContext";
 import emptyImage from "../assets/fingerprint.png";
 import styles from "./DogDetail.module.css";
-
-interface DogProps {
-  id?: string;
-  attributes: {
-    name: string;
-    description: string;
-    image: string;
-  };
-}
+import type { DogProps } from "../types/dogs";
 
 const DogDetail = () => {
-  const { breed } = useParams<{ breed: string }>();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data, loading } = useAsync<DogProps[]>(() => fetchDogBreeds());
+  const { data: dog, loading } = useAsync<DogProps | null>(
+    () => (id ? fetchDogBreedById(id) : Promise.resolve(null)),
+    [],
+  );
   const { isFavorite, toggleFavorite } = useFavorites();
 
-  const dogs = data || [];
-
-  const dog = dogs.find(
-    (d) => d.attributes.name.toLowerCase() === breed?.toLowerCase(),
-  );
-
   if (loading) {
-    return (
-      <div className={styles.detail}>
-        <button onClick={() => navigate("/")} className={styles.backBtn}>
-          ← Voltar
-        </button>
-        <p className={styles.loading}>Carregando...</p>
-      </div>
-    );
+    return <p className={styles.spinner}>Carregando...</p>;
   }
 
   if (!dog) {
@@ -58,7 +40,7 @@ const DogDetail = () => {
       <div className={styles.content}>
         <div className={styles.imageSection}>
           <img
-            src={dog.attributes.image || emptyImage}
+            src={emptyImage}
             alt={dog.attributes.name}
             className={styles.image}
           />

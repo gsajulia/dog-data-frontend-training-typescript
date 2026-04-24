@@ -1,27 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DogCard from "../components/DogCard/DogCard";
 import SearchBar from "../components/SearchBar/SearchBar";
+import Pagination from "../components/Pagination/Pagination";
 import { fetchDogBreeds } from "../service/dogService";
 import { useAsync } from "../hooks/useAsync";
 import styles from "./Home.module.css";
 
-interface DogProps {
-  attributes: {
-    name: string;
-    description: string;
-    image: string;
-  };
-}
+const PAGE_SIZE = 15;
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, loading, error } = useAsync<DogProps[]>(() => fetchDogBreeds());
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, loading, error } = useAsync(
+    () => fetchDogBreeds(currentPage, PAGE_SIZE),
+    [currentPage],
+  );
 
-  const dogs = data || [];
+  const dogs = data?.data || [];
 
   const filteredDogs = dogs.filter((dog) =>
     dog.attributes.name.toLowerCase().includes(searchTerm.toLowerCase().trim()),
   );
+
+  const hasNextPage = dogs.length === PAGE_SIZE;
+  const hasPrevPage = currentPage > 1;
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(1, prev - 1));
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -35,9 +45,9 @@ const Home = () => {
           filteredDogs.map((dog, index) => (
             <DogCard
               key={index}
+              id={dog.id || ""}
               breed={dog.attributes.name}
               description={dog.attributes.description}
-              image={dog.attributes.image}
             />
           ))}
 
@@ -49,6 +59,16 @@ const Home = () => {
 
         {loading && <p className={styles.noResults}>Loading...</p>}
       </div>
+
+      {!error && !loading && filteredDogs.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          hasNextPage={hasNextPage}
+          hasPrevPage={hasPrevPage}
+          onNextPage={handleNextPage}
+          onPrevPage={handlePrevPage}
+        />
+      )}
     </div>
   );
 };

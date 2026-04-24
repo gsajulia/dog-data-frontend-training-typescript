@@ -4,18 +4,18 @@ import emptyImage from "../../assets/fingerprint.png";
 import { useFavorites } from "../../context/FavoritesContext.js";
 
 interface DogCardProps {
+  id: string;
   breed: string;
   description: string;
-  image: string;
 }
 
-const DogCard = ({ breed, description, image }: DogCardProps) => {
+const DogCard = ({ id, breed, description }: DogCardProps) => {
   const navigate = useNavigate();
   const { isFavorite, toggleFavorite } = useFavorites();
   const isCurrentFavorite = isFavorite(breed);
 
   const handleCardClick = () => {
-    navigate(`/dog/${breed}`);
+    navigate(`/dog/${id}`);
   };
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -26,7 +26,7 @@ const DogCard = ({ breed, description, image }: DogCardProps) => {
   return (
     <div className={styles.card} onClick={handleCardClick}>
       <div className={styles.imageContainer}>
-        <img src={image || emptyImage} alt={breed} className={styles.image} />
+        <img src={emptyImage} alt={breed} className={styles.image} />
       </div>
       <h2 className={styles.breed}>{breed}</h2>
       <p className={styles.description}>{description}</p>

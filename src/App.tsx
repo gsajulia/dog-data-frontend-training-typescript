@@ -17,7 +17,7 @@ function App() {
           </header>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/dog/:breed" element={<DogDetail />} />
+            <Route path="/dog/:id" element={<DogDetail />} />
           </Routes>
         </div>
       </FavoritesProvider>

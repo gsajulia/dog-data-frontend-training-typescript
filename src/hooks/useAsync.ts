@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 interface UseAsyncState<T> {
   data: T | null;
@@ -8,29 +8,38 @@ interface UseAsyncState<T> {
 
 export const useAsync = <T>(
   asyncFunction: () => Promise<T>,
-  immediate = true,
+  deps: React.DependencyList,
 ) => {
   const [state, setState] = useState<UseAsyncState<T>>({
     data: null,
-    loading: immediate,
+    loading: false,
     error: null,
   });
 
-  const executeCallback = useCallback(async () => {
-    setState({ data: null, loading: true, error: null });
-    try {
-      const response = await asyncFunction();
-      setState({ data: response, loading: false, error: null });
-    } catch (error) {
-      setState({ data: null, loading: false, error: error as Error });
-    }
-  }, []);
-
   useEffect(() => {
-    if (immediate) {
-      executeCallback();
-    }
-  }, [immediate]);
+    let cancelled = false;
 
-  return { ...state, executeCallback };
+    const run = async () => {
+      setState({ data: null, loading: true, error: null });
+
+      try {
+        const response = await asyncFunction();
+        if (!cancelled) {
+          setState({ data: response, loading: false, error: null });
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setState({ data: null, loading: false, error: error as Error });
+        }
+      }
+    };
+
+    run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, deps);
+
+  return state;
 };
