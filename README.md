@@ -8,6 +8,7 @@ To set up the project locally, follow these steps:
 
 ### Prerequisites
 
+- **git**
 - **Node.js**
 - **npm**
 
@@ -21,10 +22,6 @@ To set up the project locally, follow these steps:
    ```
 
 2. Navigate into the project directory:
-
-   ```bash
-   cd dog-data-frontend-training
-   ```
 
 3. Install the necessary dependencies:
 
