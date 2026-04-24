@@ -1,9 +1,9 @@
 import { useState } from "react";
-import DogCard from "../DogCard/DogCard.js";
-import SearchBar from "../SearchBar/SearchBar.js";
-import styles from "./DogList.module.css";
-import { fetchDogBreeds } from "../../service/dogService.js";
-import { useAsync } from "../../hooks/useAsync.js";
+import DogCard from "../components/DogCard/DogCard";
+import SearchBar from "../components/SearchBar/SearchBar";
+import { fetchDogBreeds } from "../service/dogService";
+import { useAsync } from "../hooks/useAsync";
+import styles from "./Home.module.css";
 
 interface DogProps {
   attributes: {
@@ -13,7 +13,7 @@ interface DogProps {
   };
 }
 
-const DogList = () => {
+const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { data, loading, error } = useAsync<DogProps[]>(() => fetchDogBreeds());
 
@@ -25,9 +25,7 @@ const DogList = () => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.searchWrapper}>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      </div>
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <div className={styles.container}>
         {error && (
           <p className={styles.noResults}>Erro ao carregar: {error.message}</p>
@@ -55,4 +53,4 @@ const DogList = () => {
   );
 };
 
-export default DogList;
+export default Home;
